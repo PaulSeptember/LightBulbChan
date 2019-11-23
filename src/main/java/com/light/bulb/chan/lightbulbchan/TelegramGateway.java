@@ -38,7 +38,7 @@ public class TelegramGateway extends TelegramLongPollingBot {
     }
 
     public TelegramGateway() throws TelegramApiRequestException {
-        this(new BotSettings().setName("LightBulbChanBot").setToken("1002867309:AAG5a6lerOHv0YSQxnSA_hNII1-vJN4LZTQ"));
+        this(new BotSettings().setName("LightBulbChanBot").setToken(""));
     }
 
     public Response sendMessage(final String text, final Long chatId) {
