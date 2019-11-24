@@ -1,5 +1,10 @@
 package com.light.bulb.chan.lightbulbchan;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+@Component
+@ConfigurationProperties(prefix = "lightbulbchan.bot")
 public class BotSettings {
     private String name;
     private String token;
