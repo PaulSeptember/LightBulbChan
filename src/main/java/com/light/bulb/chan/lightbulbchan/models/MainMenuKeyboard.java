@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenuKeyboard extends ReplyKeyboardMarkup {
-    public static final String WEATHER_BUTTON_TEXT = "Weather";
-    public static final String FILES_BUTTON_TEXT = "Files";
-    public static final String SCHEDULE_BUTTON_TEXT = "Schedule";
+    public static final String WEATHER_BUTTON_TEXT = "Погода";
+    public static final String FILES_BUTTON_TEXT = "Загрузка файлов";
+    public static final String SCHEDULE_BUTTON_TEXT = "Расписание";
 
     public MainMenuKeyboard() {
         List<KeyboardRow> buttons = new ArrayList<>();

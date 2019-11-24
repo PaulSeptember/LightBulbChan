@@ -20,15 +20,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TelegramGateway extends TelegramLongPollingBot {
     private static final Logger log = LogManager.getLogger(TelegramGateway.class);
     private static TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
     private final BotSettings settings;
+    private final Map<Long, String> chatToGroup = new HashMap<>();
+
     @Autowired
     private Core core;
 
@@ -58,18 +58,28 @@ public class TelegramGateway extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             Message message = update.getMessage();
+
             if (message.getLocation() != null) {
                 Location location = message.getLocation();
                 core.OnMessage(new LBCMessage().setType(LBCMessageType.WEATHER)
                         .setLat(Float.toString(location.getLatitude())).setLon(Float.toString(location.getLongitude())).setChatId(message.getChatId()));
-            }
-
-            if (message.getText().equals(MainMenuKeyboard.SCHEDULE_BUTTON_TEXT)) {
-                Location location = message.getLocation();
-                core.OnMessage(new LBCMessage().setType(LBCMessageType.SCHEDULE).setChatId(message.getChatId()).setGroupId("753501"));
+            } else if (message.getText().equals(MainMenuKeyboard.SCHEDULE_BUTTON_TEXT)) {
+                if (!chatToGroup.containsKey(message.getChatId())) {
+                    sendMessage("Введи свою группу пожалуйста :)", message.getChatId());
+                } else {
+                    core.OnMessage(new LBCMessage().setType(LBCMessageType.SCHEDULE).setChatId(message.getChatId())
+                            .setGroupId(chatToGroup.get(message.getChatId())));
+                }
+            } else if (message.getText().length() == 6) {
+                chatToGroup.put(message.getChatId(), message.getText());
+                core.OnMessage(new LBCMessage().setType(LBCMessageType.SCHEDULE).setChatId(message.getChatId())
+                        .setGroupId(chatToGroup.get(message.getChatId())));
+            } else {
+                sendMessage("Используйте меню для ввода!", message.getChatId());
             }
         }
     }
+
 
     @Override
     public String getBotUsername() {
