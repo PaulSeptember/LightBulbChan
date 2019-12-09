@@ -7,6 +7,8 @@ public class LBCMessage {
     private String lon;
     private Long chatId;
     private String groupId;
+    private int day;
+    private String expansion;
 
     public LBCMessageType getType() {
         return type;
@@ -59,6 +61,24 @@ public class LBCMessage {
 
     public LBCMessage setGroupId(String groupId) {
         this.groupId = groupId;
+        return this;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public LBCMessage setDay(int day) {
+        this.day = day;
+        return this;
+    }
+
+    public String getExpansion() {
+        return expansion;
+    }
+
+    public LBCMessage setExpansion(String expansion) {
+        this.expansion = expansion;
         return this;
     }
 }

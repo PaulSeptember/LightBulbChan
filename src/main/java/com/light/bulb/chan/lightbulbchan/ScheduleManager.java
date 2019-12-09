@@ -3,9 +3,6 @@ package com.light.bulb.chan.lightbulbchan;
 import com.light.bulb.chan.lightbulbchan.models.FullSchedule;
 import com.light.bulb.chan.lightbulbchan.models.Response;
 import com.light.bulb.chan.lightbulbchan.models.SubjectSchedule;
-import com.light.bulb.chan.lightbulbchan.models.WeatherResponse;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -58,6 +55,44 @@ public class ScheduleManager {
         }
 
         result.append("Знаешь я не нашел пар так что... Отдыхай )");
+        return result.toString();
+    }
+
+    public static String parseForDay(final FullSchedule fullSchedule, final int day) {
+        StringBuilder result = new StringBuilder();
+
+        if (fullSchedule == null || fullSchedule.getSchedules() == null || fullSchedule.getSchedules().length <= day) {
+            result.append("Знаешь я не нашел пар так, что... Отдыхай )");
+            return result.toString();
+        }
+
+        SubjectSchedule[] subjects = fullSchedule.getSchedules()[day].getSchedule();
+        StringBuilder temp = new StringBuilder();
+
+        for (int j = 0; j < subjects.length; ++j) {
+            for (Long x : subjects[j].getWeekNumber()) {
+                if (x.equals(fullSchedule.getCurrentWeekNumber())) {
+                    temp.append("Предмет: ").append(subjects[j].getSubject()).append(" ")
+                            .append(subjects[j].getLessonType()).append("\n");
+                    if (subjects[j].getAuditory().length > 0) {
+                        temp.append("Аудитория: ").append(subjects[j].getAuditory()[0]).append("\n");
+                    }
+                    if (subjects[j].getEmployee().length > 0) {
+                        temp.append("Ведет: ").append(subjects[j].getEmployee()[0].getFio()).append("\n");
+                    }
+                    temp.append("Время: ").append(subjects[j].getLessonTime()).append("\n\n\n");
+                    break;
+                }
+
+            }
+        }
+
+        if (temp.length() > 0) {
+            result.append(fullSchedule.getSchedules()[day].getWeekDay()).append("\n").append(temp);
+            return result.toString();
+        }
+
+        result.append("Знаешь я не нашел пар так, что... Отдыхай )");
         return result.toString();
     }
 
