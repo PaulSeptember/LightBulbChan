@@ -61,8 +61,14 @@ public class ScheduleManager {
     public static String parseForDay(final FullSchedule fullSchedule, final int day) {
         StringBuilder result = new StringBuilder();
 
+        if (fullSchedule == null || fullSchedule.getSchedules() == null || fullSchedule.getSchedules().length <= day) {
+            result.append("Знаешь я не нашел пар так, что... Отдыхай )");
+            return result.toString();
+        }
+
         SubjectSchedule[] subjects = fullSchedule.getSchedules()[day].getSchedule();
         StringBuilder temp = new StringBuilder();
+
         for (int j = 0; j < subjects.length; ++j) {
             for (Long x : subjects[j].getWeekNumber()) {
                 if (x.equals(fullSchedule.getCurrentWeekNumber())) {
@@ -85,7 +91,6 @@ public class ScheduleManager {
             result.append(fullSchedule.getSchedules()[day].getWeekDay()).append("\n").append(temp);
             return result.toString();
         }
-
 
         result.append("Знаешь я не нашел пар так, что... Отдыхай )");
         return result.toString();
